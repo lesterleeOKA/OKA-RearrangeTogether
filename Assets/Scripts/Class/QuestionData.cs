@@ -63,7 +63,8 @@ public enum QuestionType
     Text = 1,
     Picture = 2,
     Audio = 3,
-    FillInBlank = 4
+    FillInBlank = 4,
+    Arrange=5
 }
 
 [Serializable]
@@ -219,6 +220,16 @@ public class CurrentQuestion
                 this.answersChoics = qa.answers;
                 this.correctAnswerId = this.answersChoics != null ? Array.IndexOf(this.answersChoics, this.correctAnswer) : 0;
                 this.playAudio();
+                break;
+            case "arrange":
+                SetUI.SetGroup(this.questionBgs, 2, 0f);
+                this.questiontype = QuestionType.Arrange;
+                questionText = this.questionBgs[2].GetComponentInChildren<TextMeshProUGUI>();
+                if (questionText != null)
+                {
+                    questionText.text = qa.question;
+                }
+                this.correctAnswer = qa.correctAnswer;
                 break;
         }
 

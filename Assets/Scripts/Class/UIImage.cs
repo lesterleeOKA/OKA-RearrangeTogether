@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using System.IO;
+using System.Linq;
 
 [Serializable]
 public class UIImage
@@ -45,6 +46,23 @@ public class UIImage
     }
 }
 
+public static class SetConvert
+{
+    public static char[] ShuffleStringToCharArray(string input)
+    {
+        char[] letters = input.ToCharArray();
+        System.Random random = new System.Random();
+        letters = letters.OrderBy(x => random.Next()).ToArray();
+
+        return letters;
+    }
+
+    public static string[] ShuffleStringToStringArray(string input)
+    {
+        return input.Split('/').Select(word => word.Trim()).
+          Where(word => !string.IsNullOrEmpty(word)).ToArray();
+    }
+}
 
 public static class SetUI
 {

@@ -5,6 +5,7 @@ using TMPro;
 using System.Linq;
 using System;
 using UnityEngine.UI;
+using DG.Tweening.Plugins;
 
 public class GameController : GameBaseController
 {
@@ -24,6 +25,7 @@ public class GameController : GameBaseController
     public string fullQAText = "";
     public string hiddenPart = "";
     public char[] correctAnswersLetter;
+    public string[] partWords;
     public int fillLetterCount = 0;
 
     public CenterFillWords centerFillWords;
@@ -67,7 +69,7 @@ public class GameController : GameBaseController
         }
         else
         {
-            string word = questionController.currentQuestion.correctAnswer;
+            string word = questionController.currentQuestion.qa.question;
             this.gridManager.UpdateGridWithWord(null, word);
             this.centerFillWords.UpdateFillWords(word);
         }
@@ -175,6 +177,7 @@ public class GameController : GameBaseController
             case QuestionType.None:
             case QuestionType.Picture:
             case QuestionType.Text:
+            case QuestionType.Arrange:
                 SetUI.SetWholeGroupTo(this.audioTypeButtons, false);
                 SetUI.SetWholeGroupTo(this.fillInBlankTypeButtons, false);
                 break;
@@ -186,7 +189,7 @@ public class GameController : GameBaseController
 
         if (this.choiceText != null)
         {
-            if(currentQuestion.answersChoics != null)
+            if(currentQuestion.answersChoics.Length > 0)
             {
                 string formattedText = ""; // Initialize a string to hold the formatted answers
 
@@ -199,11 +202,49 @@ public class GameController : GameBaseController
             }
             else
             {
-                this.fullQAText = currentQuestion.qa.question;
-                int answerLength = currentQuestion.correctAnswer.Length;
-                this.hiddenPart = new string('_', answerLength);
-                this.correctAnswersLetter = currentQuestion.correctAnswer.ToCharArray();
-                this.UpdateDisplayedQuestion();
+                switch (currentQuestion.questiontype)
+                {
+                    case QuestionType.Text:
+                        this.fullQAText = currentQuestion.qa.question;
+                        int answerLength = currentQuestion.correctAnswer.Length;
+                        this.hiddenPart = new string('_', answerLength);
+                        this.correctAnswersLetter = currentQuestion.correctAnswer.ToCharArray();
+                        this.UpdateDisplayedQuestion();
+                        break;
+                    case QuestionType.Arrange:
+                        this.fullQAText = currentQuestion.qa.question;
+                        this.partWords = SetConvert.ShuffleStringToStringArray(this.fullQAText);
+                        this.hiddenPart = "";
+                        this.UpdateDisplayedQuestion();
+                        break;
+                }
+            }
+        }
+    }
+
+    public void updateSentence(Cell cell, Action completeAction = null)
+    {
+        if (this.partWords.Length > 0)
+        {
+            if (this.fillLetterCount < this.partWords.Length)
+            {
+                string letter = cell.content.text;
+                string space = string.IsNullOrEmpty(this.hiddenPart) ? "" : " ";
+
+                if (this.fillLetterCount < this.partWords.Length)
+                {
+                    for (int i = 0; i < this.playerNumber; i++)
+                    {
+                        if (this.playerControllers[i] != null)
+                        {
+                            this.playerControllers[i].correctAction(space + letter);
+                        }
+                    }
+
+                    this.hiddenPart += (space + letter);
+                    completeAction?.Invoke();
+                    this.fillLetterCount += this.nextCount;                   
+                }
             }
         }
     }
@@ -256,10 +297,12 @@ public class GameController : GameBaseController
 
     public void UpdateDisplayedQuestion(string content = "")
     {
-        int existingUnderscoreCount = this.fullQAText.Count(c => c == '_');
+        //int existingUnderscoreCount = this.fullQAText.Count(c => c == '_');
 
-        if (existingUnderscoreCount > 0) {
-            this.choiceText.text = this.fullQAText.Replace(new string('_', existingUnderscoreCount), this.hiddenPart);
+        //if (existingUnderscoreCount > 0) {
+        if (!string.IsNullOrEmpty(content)) { 
+            //this.choiceText.text = this.fullQAText.Replace(new string('_', existingUnderscoreCount), this.hiddenPart);
+            this.choiceText.text = this.hiddenPart;
         }
         else
         {
@@ -268,7 +311,7 @@ public class GameController : GameBaseController
 
         this.centerFillWords.FillWord(this.gridManager, content, this.correctAnswersLetter);
 
-        if (this.fillLetterCount == this.correctAnswersLetter.Length)
+        if (this.fillLetterCount == this.partWords.Length)
         {
             for (int i = 0; i < this.playerNumber; i++)
             {
@@ -315,7 +358,7 @@ public class GameController : GameBaseController
             }
             else
             {
-                string word = questionController.currentQuestion.correctAnswer;
+                string word = questionController.currentQuestion.qa.question;
                 this.gridManager.UpdateGridWithWord(null, word);
                 this.centerFillWords.UpdateFillWords(word);
             }
@@ -397,12 +440,16 @@ public class CenterFillWords
     public int defaultLetterLength = 13;
     public int defaultCellX = 94;
     public int defaultSpaceX = 15;
+    public int padding_Top;
+    public int padding_Bottom;
+    public int padding_Left;
+    public int padding_Right;
     public int nextCount = 1;
 
     public void UpdateFillWords(string word)
     {
-        char[] wordLetter = word.ToCharArray();
-        int wordLength = word.Length;
+        string[] wordParts = SetConvert.ShuffleStringToStringArray(word);
+        int wordLength = wordParts.Length;
         int overLetterLength = wordLength - this.defaultLetterLength;
         int _cellX = overLetterLength > 0 ? (this.defaultCellX - (overLetterLength * 5)) : this.defaultCellX;
         int _spaceX = overLetterLength > 0 ? (this.defaultSpaceX - (overLetterLength * 2)) : this.defaultSpaceX;
@@ -411,6 +458,10 @@ public class CenterFillWords
         {
             this.filledWords[i].cellSize = new Vector2Int(_cellX, _cellX);
             this.filledWords[i].spacing = new Vector2Int(_spaceX, 0);
+            this.filledWords[i].padding.top = this.padding_Top;
+            this.filledWords[i].padding.bottom = this.padding_Bottom;
+            this.filledWords[i].padding.left = this.padding_Left;
+            this.filledWords[i].padding.right = this.padding_Right;
             int storedFillWordsLength = this.storedFillWords[i].WordLength;
             int updateFillWords = wordLength - storedFillWordsLength;
 
@@ -432,7 +483,7 @@ public class CenterFillWords
                         this.storedFillWords[i].fillWords.Add(fillWord);
                     }
 
-                    this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordLetter[j].ToString()) ? false : true);
+                    this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordParts[j]) ? false : true);
                 }
             }
             else if (updateFillWords < 0)
@@ -442,7 +493,7 @@ public class CenterFillWords
                     if (j < wordLength)
                     {
                         this.storedFillWords[i].fillWords[j].gameObject.SetActive(true);
-                        this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordLetter[j].ToString()) ? false : true);
+                        this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordParts[j]) ? false : true);
                     }
                     else
                     {
@@ -455,7 +506,7 @@ public class CenterFillWords
                 for (int j = 0; j < storedFillWordsLength; j++)
                 {
                     this.storedFillWords[i].fillWords[j].gameObject.SetActive(true);
-                    this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordLetter[j].ToString()) ? false : true);
+                    this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordParts[j]) ? false : true);
                 }
             }
 

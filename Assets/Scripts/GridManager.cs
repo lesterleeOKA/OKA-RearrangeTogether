@@ -185,15 +185,6 @@ public class GridManager
         return new List<int>(uniqueIntegers);
     }
 
-
-    char[] ShuffleStringToCharArray(string input)
-    {
-        char[] letters = input.ToCharArray();
-        System.Random random = new System.Random();
-        letters = letters.OrderBy(x => random.Next()).ToArray();
-
-        return letters;
-    }
     public void UpdateGridWithWord(string[] newMultipleWords=null, string newWord=null)
     {
        this.PlaceWordInGrid(newMultipleWords, newWord);
@@ -214,15 +205,22 @@ public class GridManager
 
     void PlaceWordInGrid(string[] multipleWords = null, string spellWord = null)
     {
-        char[] letters = null;
+        //char[] letters = null;
+        string[] letters = null;
         if (multipleWords != null && multipleWords.Length > 0)
         {
             this.isMCType = true;
         }
 
-        if (!string.IsNullOrEmpty(spellWord))
+        /*if (!string.IsNullOrEmpty(spellWord))
         {
             letters = this.ShuffleStringToCharArray(spellWord);
+            this.isMCType = false;
+        }*/
+
+        if (!string.IsNullOrEmpty(spellWord))
+        {
+            letters = SetConvert.ShuffleStringToStringArray(spellWord);
             this.isMCType = false;
         }
 
@@ -250,13 +248,10 @@ public class GridManager
             string displayText = $"{letter}";
             //string displayText = $"{letter}: {multipleWords[i]}";
 
-            // Use '_' if the letter is a space, otherwise use the letter itself
-           // string letterDisplay = string.IsNullOrWhiteSpace(letters[i].ToString()) ? this.spaceSymbol : letters[i].ToString();
-
             if (!string.IsNullOrWhiteSpace(letters[i].ToString())) {
 
                 bool showUnderLine = false;
-                switch (letters[i].ToString())
+                /*switch (letters[i].ToString())
                 {
                     case "b":
                     case "q":
@@ -269,7 +264,7 @@ public class GridManager
                     default:
                         showUnderLine = false;
                         break;
-                }
+                }*/
 
                 this.cells[position.x, position.y].SetTextContent(this.isMCType ? displayText : letters[i].ToString(), default, null, showUnderLine);
             }

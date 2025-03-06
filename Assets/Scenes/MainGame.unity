@@ -291,6 +291,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &144487
@@ -802,6 +803,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &45543429
@@ -1085,6 +1087,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &60867835
@@ -1564,6 +1567,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &107287923
@@ -1844,6 +1848,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &135133213
@@ -2320,6 +2325,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &196232293
@@ -2967,6 +2973,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &315686731
@@ -3443,6 +3450,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &347071970
@@ -3651,6 +3659,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &356929833
@@ -4172,6 +4181,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &374815820
@@ -4947,6 +4957,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &392732754
@@ -5523,6 +5534,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &441484635
@@ -5961,6 +5973,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &483147832
@@ -6169,6 +6182,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &498042707
@@ -6647,6 +6661,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &524879081
@@ -6855,6 +6870,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &536620632
@@ -7063,6 +7079,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &537851998
@@ -7542,6 +7559,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &568138386
@@ -7750,6 +7768,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &568605134
@@ -9200,6 +9219,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &680590078
@@ -9834,6 +9854,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &698225090
@@ -11065,6 +11086,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &804320696
@@ -11678,6 +11700,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &831658958
@@ -12257,6 +12280,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &878891190
@@ -13212,6 +13236,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1016755006
@@ -14464,6 +14489,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1105201918
@@ -14983,6 +15009,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1200171397
@@ -15778,6 +15805,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1282547134
@@ -16806,6 +16834,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1400060724
@@ -17014,6 +17043,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1414618040
@@ -17692,6 +17722,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1446436942
@@ -17900,6 +17931,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1456311378
@@ -18197,6 +18229,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1468286446
@@ -18673,6 +18706,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1498870676
@@ -18881,6 +18915,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1507132269
@@ -19164,6 +19199,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1570983776
@@ -19372,6 +19408,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1576646402
@@ -19789,6 +19826,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1589780563
@@ -19997,6 +20035,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1600093754
@@ -20537,6 +20576,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1634662064
@@ -20930,6 +20970,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1719464635
@@ -21348,6 +21389,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1751863326
@@ -21556,6 +21598,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1756733967
@@ -22176,6 +22219,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1811229539
@@ -22384,6 +22428,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1820024478
@@ -23691,6 +23736,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1894800042
@@ -23899,6 +23945,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1914893078
@@ -24241,6 +24288,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &1952612219
@@ -25008,7 +25056,6 @@ MonoBehaviour:
     isMCType: 0
     gridCount: 0
     checkAdditionalConditions: 0
-    spaceSymbol: _
   playerPrefab: {fileID: 6606873324357462162, guid: 4263fd549a8d6414f9ea206ca9c4b1e3, type: 3}
   parent: {fileID: 739772688}
   defaultAnswerBox: []
@@ -25027,6 +25074,7 @@ MonoBehaviour:
   fullQAText: 
   hiddenPart: 
   correctAnswersLetter: 
+  partWords: []
   fillLetterCount: 0
   centerFillWords:
     fillWordPrefab: {fileID: 6469547887478794948, guid: f690fbab5a950aa47aa6717a8532c0de, type: 3}
@@ -25039,9 +25087,15 @@ MonoBehaviour:
     - name: p3-p4
       fillWords: []
     centerLetterCount: 0
-    defaultLetterLength: 13
-    defaultCellX: 94
-    defaultSpaceX: 15
+    defaultLetterLength: 5
+    defaultCellX: 135
+    defaultSpaceX: 50
+    padding_Top: 65
+    padding_Bottom: 0
+    padding_Left: 20
+    padding_Right: 20
+    nextCount: 1
+  nextCount: 1
 --- !u!4 &2027992706
 Transform:
   m_ObjectHideFlags: 0
@@ -25425,6 +25479,7 @@ MonoBehaviour:
   col: 0
   isSelected: 0
   isPlayerStayed: 0
+  showUnderLine: 0
   cellId: -1
   getWordParticle: {fileID: 0}
 --- !u!114 &2043774629

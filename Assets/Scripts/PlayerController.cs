@@ -182,7 +182,7 @@ public class PlayerController : UserData
     public void checkAnswer(int currentTime, Action onCompleted = null)
     {
         var currentQuestion = QuestionController.Instance?.currentQuestion;
-        var lowerQIDAns = currentQuestion.correctAnswer.ToLower();
+        var lowerQIDAns = currentQuestion.correctAnswer;
 
         if (!this.IsCheckedAnswer)
         {
@@ -286,10 +286,11 @@ public class PlayerController : UserData
             this.updateRetryTimes(true);
             yield return new WaitForSeconds(delay);
             GameController.Instance?.setWrongPopup(false);
-            if (this.Retry <= 0)
+            /*if (this.Retry <= 0)
             {
                 this.IsTriggerToNextQuestion = true;
-            }
+            }*/
+            this.IsTriggerToNextQuestion = true;
         }
         this.scoring.correct = false;
 
@@ -457,7 +458,14 @@ public class PlayerController : UserData
             }
             else
             {
-                GameController.Instance.updateQAFillInBlank(cell, 
+                SetUI.SetScale(this.answerBoxCg, true, 1f, 0.5f, Ease.OutElastic);
+                if (this.answerBox != null)
+                    this.answerBox.text = content;
+
+                //gridManager.removeCollectedCellId(cell);
+                this.collectedCell.Add(cell);
+                cell.SetTextStatus(false);
+                /*GameController.Instance.updateSentence(cell, 
                 ()=>
                 {
                     //Correct
@@ -479,7 +487,7 @@ public class PlayerController : UserData
                     gridManager.updateNewWordPosition(cell);
                     this.backToStartPosition();
                 }
-                );
+                );*/
             }
         }
     }
@@ -563,14 +571,11 @@ public class PlayerController : UserData
                 cell.setCellEnterColor(true, GameController.Instance.showCells);
                 if (cell.isSelected && this.Retry > 0)
                 {
-                    var gridManager = GameController.Instance.gridManager;
-                    if (gridManager.isMCType){
-                        if (this.collectedCell.Count > 0)
-                        {
-                            var latestCell = this.collectedCell[this.collectedCell.Count - 1];
-                            latestCell.SetTextStatus(true);
-                            this.collectedCell.RemoveAt(this.collectedCell.Count - 1);
-                        }
+                    if (this.collectedCell.Count > 0)
+                    {
+                        var latestCell = this.collectedCell[this.collectedCell.Count - 1];
+                        latestCell.SetTextStatus(true);
+                        this.collectedCell.RemoveAt(this.collectedCell.Count - 1);
                     }
                     this.setAnswer(cell);
                     this.characterStatus = CharacterStatus.idling;

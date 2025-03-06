@@ -159,6 +159,7 @@ public class QuestionManager : MonoBehaviour
 
             switch (qa.questionType)
             {
+                case "arrange":
                 case "text":
                     ExternalCaller.UpdateLoadBarStatus("Loading Question");
                     this.loadedItems++;
