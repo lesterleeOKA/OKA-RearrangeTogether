@@ -308,6 +308,7 @@ public class PlayerController : UserData
         this.characterTransform.localPosition = this.startPosition;
         this.collectedCell.Clear();
         this.answerBox.text = string.Empty;
+        SetUI.SetScale(this.answerBoxCg, false);
     }
 
     void FixedUpdate()
@@ -527,6 +528,7 @@ public class PlayerController : UserData
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Check if the other collider has a specific tag, e.g., "Player"
+        if (this.IsCheckedAnswer) return;
         if (other.CompareTag("Word") && !SetUI.isAnimated)
         {
             var cell = other.GetComponent<Cell>();
@@ -546,18 +548,21 @@ public class PlayerController : UserData
                 }
             }
         }
-        else
-        {
-            if (other.CompareTag("fillWord_top") && this.UserId > 1 && !SetUI.isAnimated)
-            {
-                this.placeWord(other);
+    }
 
-            }
-            else if (other.CompareTag("fillWord_bottom") && this.UserId < 2 && !SetUI.isAnimated)
-            {
-                this.placeWord(other);
-            }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (this.IsCheckedAnswer) return;
+        if (other.CompareTag("fillWord_top") && this.UserId > 1 && !SetUI.isAnimated)
+        {
+            this.placeWord(other);
+
         }
+        else if (other.CompareTag("fillWord_bottom") && this.UserId < 2 && !SetUI.isAnimated)
+        {
+            this.placeWord(other);
+        }
+
     }
 
     void placeWord(Collider2D other)
@@ -569,26 +574,26 @@ public class PlayerController : UserData
             if (!string.IsNullOrEmpty(this.answerBox.text))
             {
                 var storedFillWords = GameController.Instance.centerFillWords.storedFillWords;
-                for(int i=0; i < storedFillWords.Length; i++)
+                var filledCell = this.collectedCell[this.collectedCell.Count - 1];
+                for (int i=0; i < storedFillWords.Length; i++)
                 {
                     for (int j = 0; j < storedFillWords[i].fillWords.Count; j++)
                     {
                         if(j == fillWord.fillId)
                         {
                             storedFillWords[i].fillWords[j].SetContent(this.answerBox.text);
+
+                            if (this.collectedCell.Count > 0)
+                            {
+                                storedFillWords[i].fillWords[j].savedCell = filledCell;
+                            }
                         }
                     }
                 }
                 SetUI.SetScale(this.answerBoxCg, false, 1f, 0.5f, Ease.OutElastic);
                 this.answerBox.text = "";
                 AudioController.Instance?.PlayAudio(9);
-
-                if (this.collectedCell.Count > 0)
-                {
-                    var filledCell = this.collectedCell[this.collectedCell.Count - 1];
-                    fillWord.savedCell = filledCell;
-                    this.collectedCell.RemoveAt(this.collectedCell.Count - 1);
-                }
+                this.collectedCell.RemoveAt(this.collectedCell.Count - 1);
             }
         }
         else
@@ -598,6 +603,7 @@ public class PlayerController : UserData
             {
                 SetUI.SetScale(this.answerBoxCg, true, 1f, 0.5f, Ease.OutElastic);
                 this.answerBox.text = fillWord.content;
+                this.collectedCell.Add(fillWord.savedCell);
                 var storedFillWords = GameController.Instance.centerFillWords.storedFillWords;
                 for (int i = 0; i < storedFillWords.Length; i++)
                 {
@@ -606,10 +612,10 @@ public class PlayerController : UserData
                         if (j == fillWord.fillId)
                         {
                             storedFillWords[i].fillWords[j].SetContent("");
+                            storedFillWords[i].fillWords[j].savedCell = null;
                         }
                     }
                 }
-                this.collectedCell.Add(fillWord.savedCell);
             }
             else
             {
