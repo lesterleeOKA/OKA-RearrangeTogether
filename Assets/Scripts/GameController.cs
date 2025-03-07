@@ -2,10 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using System.Linq;
 using System;
 using UnityEngine.UI;
-using DG.Tweening.Plugins;
 
 public class GameController : GameBaseController
 {
@@ -209,46 +207,69 @@ public class GameController : GameBaseController
                         int answerLength = currentQuestion.correctAnswer.Length;
                         this.hiddenPart = new string('_', answerLength);
                         this.correctAnswersLetter = currentQuestion.correctAnswer.ToCharArray();
-                        this.UpdateDisplayedQuestion();
                         break;
                     case QuestionType.Arrange:
                         this.fullQAText = currentQuestion.qa.question;
                         this.partWords = SetConvert.ShuffleStringToStringArray(this.fullQAText);
                         this.hiddenPart = "";
-                        this.UpdateDisplayedQuestion();
                         break;
                 }
+                this.UpdateDisplayedQuestion();
             }
         }
     }
 
-    public void updateSentence(Cell cell, Action completeAction = null)
+    public void updateSentence()
     {
+        if (this.partWords.Length > 0)
+        {
+            this.hiddenPart = this.centerFillWords.getCurrentFilledSentence();
+            for (int i = 0; i < this.playerNumber; i++)
+            {
+                if (this.playerControllers[i] != null)
+                {
+                    this.playerControllers[i].correctAction(this.hiddenPart);
+                }
+            }
+
+            if(this.choiceText != null) this.choiceText.text = this.hiddenPart;
+
+            if (this.centerFillWords.centerLetterCount == this.partWords.Length)
+            {
+                for (int i = 0; i < this.playerNumber; i++)
+                {
+                    if (this.playerControllers[i] != null)
+                    {
+                        this.playerControllers[i].finishedAction();
+                    }
+                }
+            }
+        }
+        
+
+        /*
         if (this.partWords.Length > 0)
         {
             if (this.fillLetterCount < this.partWords.Length)
             {
-                string letter = cell.content.text;
+                string letter = fillWord.content;
                 string space = string.IsNullOrEmpty(this.hiddenPart) ? "" : " ";
 
-                if (this.fillLetterCount < this.partWords.Length)
+                for (int i = 0; i < this.playerNumber; i++)
                 {
-                    for (int i = 0; i < this.playerNumber; i++)
+                    if (this.playerControllers[i] != null)
                     {
-                        if (this.playerControllers[i] != null)
-                        {
-                            this.playerControllers[i].correctAction(space + letter);
-                        }
+                        this.playerControllers[i].correctAction(this.hiddenPart);
                     }
-
-                    this.hiddenPart += (space + letter);
-                    completeAction?.Invoke();
-                    this.fillLetterCount += this.nextCount;                   
                 }
-            }
-        }
-    }
 
+                completeAction?.Invoke();
+                this.centerFillWords.filledCells.Add(cell);
+                this.fillLetterCount = this.centerFillWords.filledCells.Count;
+            }
+        }*/
+    }
+    /*
     public void updateQAFillInBlank(Cell cell, Action correctAction=null, Action inCorrectAction=null)
     {
         if(this.correctAnswersLetter.Length > 0) {
@@ -293,15 +314,11 @@ public class GameController : GameBaseController
     {
        int fillWordId = this.fillLetterCount;
        return this.centerFillWords.storedFillWords[centerfillId].fillWords[fillWordId].transform;
-    }
+    }*/
 
     public void UpdateDisplayedQuestion(string content = "")
     {
-        //int existingUnderscoreCount = this.fullQAText.Count(c => c == '_');
-
-        //if (existingUnderscoreCount > 0) {
         if (!string.IsNullOrEmpty(content)) { 
-            //this.choiceText.text = this.fullQAText.Replace(new string('_', existingUnderscoreCount), this.hiddenPart);
             this.choiceText.text = this.hiddenPart;
         }
         else
@@ -309,18 +326,7 @@ public class GameController : GameBaseController
             this.choiceText.text = "";
         }
 
-        this.centerFillWords.FillWord(this.gridManager, content, this.correctAnswersLetter);
-
-        if (this.fillLetterCount == this.partWords.Length)
-        {
-            for (int i = 0; i < this.playerNumber; i++)
-            {
-                if (this.playerControllers[i] != null)
-                {
-                    this.playerControllers[i].finishedAction();
-                }
-            }
-        }
+        //this.centerFillWords.FillWord(this.gridManager, content, this.correctAnswersLetter, false);
     }
 
 
@@ -473,13 +479,17 @@ public class CenterFillWords
                     {
                         if (this.storedFillWords[i].WordLength > 0)
                         {
+                            this.storedFillWords[i].fillWords[j].savedCell = null;
                             this.storedFillWords[i].fillWords[j].gameObject.SetActive(true);
                         }
                     }
                     else
                     {
-                        var fillWord = GameObject.Instantiate(this.fillWordPrefab, this.filledWords[i].transform).GetComponent<FillWord>();
-                        fillWord.init("FillWord_" + this.storedFillWords[i].WordLength);
+                        var fillWordObj = GameObject.Instantiate(this.fillWordPrefab, this.filledWords[i].transform);
+                        fillWordObj.gameObject.tag = "fillWord_" + (i == 0 ? "bottom" : "top");
+                        fillWordObj.GetComponent<CircleCollider2D>().radius = _cellX / 3;
+                        var fillWord = fillWordObj.GetComponent<FillWord>();
+                        fillWord.init("FillWord_" + this.storedFillWords[i].WordLength, this.storedFillWords[i].WordLength);
                         this.storedFillWords[i].fillWords.Add(fillWord);
                     }
 
@@ -490,6 +500,7 @@ public class CenterFillWords
             {
                 for (int j = 0; j < storedFillWordsLength; j++)
                 {
+                    this.storedFillWords[i].fillWords[j].savedCell = null;
                     if (j < wordLength)
                     {
                         this.storedFillWords[i].fillWords[j].gameObject.SetActive(true);
@@ -505,16 +516,17 @@ public class CenterFillWords
             {
                 for (int j = 0; j < storedFillWordsLength; j++)
                 {
+                    this.storedFillWords[i].fillWords[j].savedCell = null;
                     this.storedFillWords[i].fillWords[j].gameObject.SetActive(true);
                     this.storedFillWords[i].fillWords[j].SetWord(string.IsNullOrWhiteSpace(wordParts[j]) ? false : true);
                 }
             }
 
-            this.storedFillWords[i].ResetWords();
+            this.storedFillWords[i].ResetWords(false);
         }
     }
 
-    public void FillWord(GridManager gridManager=null, string content = "", char[] correctAnswersLetter = null)
+    public void FillWord(GridManager gridManager=null, string content = "", char[] correctAnswersLetter = null, bool showHint= true)
     {
         if (!string.IsNullOrEmpty(content))
         {
@@ -534,11 +546,34 @@ public class CenterFillWords
             }
             this.centerLetterCount += this.nextCount;
 
-            for (int i = 0; i < this.storedFillWords.Length; i++)
+            if (showHint)
             {
-                this.storedFillWords[i].SetNextLetterHint(this.centerLetterCount);
+                for (int i = 0; i < this.storedFillWords.Length; i++)
+                {
+                    this.storedFillWords[i].SetNextLetterHint(this.centerLetterCount);
+                }
             }
         }
+    }
+
+    public string getCurrentFilledSentence(int filledBarId=0)
+    {
+        this.centerLetterCount = 0;
+        string currentSentence = string.Empty;
+        int wordPartLength = this.storedFillWords[filledBarId].fillWords.Count;
+        for (int j = 0; j < wordPartLength; j++)
+        {
+            string space = j == 0 ? "" : " ";
+            string word = this.storedFillWords[filledBarId].fillWords[j].content;
+
+            if(!string.IsNullOrEmpty(word))
+            {
+                this.centerLetterCount += 1;
+            }
+            currentSentence += space + word;
+        }
+
+        return currentSentence;
     }
 
     public void resetWord()
@@ -573,11 +608,11 @@ public class StoredFillWords
         }
     }
 
-    public void ResetWords()
+    public void ResetWords(bool useHint=true)
     {
         for(int i = 0; i < this.fillWords.Count; i++)
         {
-            if(i == 0) 
+            if(i == 0 && useHint) 
                 this.fillWords[i].SetHint(true);
             else
                 this.fillWords[i].SetHint(false);

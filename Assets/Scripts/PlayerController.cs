@@ -191,9 +191,12 @@ public class PlayerController : UserData
             int eachQAScore = currentQuestion.qa.score.full == 0 ? 10 : currentQuestion.qa.score.full;
             int currentScore = this.Score;
 
+            Debug.Log("lowerQIDAns:" + lowerQIDAns);
+            Debug.Log("answer:" + this.answer);
             int resultScore = this.scoring.score(this.answer, currentScore, lowerQIDAns, eachQAScore);
             this.Score = resultScore;
             this.IsCorrect = this.scoring.correct;
+            Debug.Log("IsCorrect :" + this.IsCorrect);
 
             StartCoroutine(this.showAnswerResult(this.scoring.correct,()=>
             {
@@ -283,7 +286,7 @@ public class PlayerController : UserData
         {
             GameController.Instance?.setWrongPopup(true);
             AudioController.Instance?.PlayAudio(2);
-            this.updateRetryTimes(true);
+            //this.updateRetryTimes(true);
             yield return new WaitForSeconds(delay);
             GameController.Instance?.setWrongPopup(false);
             /*if (this.Retry <= 0)
@@ -304,27 +307,11 @@ public class PlayerController : UserData
         this.characterCanvas.sortingOrder = this.characterOrder;
         this.characterTransform.localPosition = this.startPosition;
         this.collectedCell.Clear();
+        this.answerBox.text = string.Empty;
     }
 
     void FixedUpdate()
     {
-        /*if(this.rectTransform != null)
-        {
-            switch (this.characterStatus)
-            {
-                case CharacterStatus.born:
-                case CharacterStatus.idling:
-                    this.StopCharacter();
-                    return;
-                case CharacterStatus.moving:
-
-                    break;
-                case CharacterStatus.nextQA:
-                    this.HoldCharacter();
-                    break;
-            }
-
-        }*/
 
         if (this.joystick == null || this.playerAppearEffect.activeInHierarchy) return;
         Vector2 direction = Vector2.zero;
@@ -462,42 +449,19 @@ public class PlayerController : UserData
                 if (this.answerBox != null)
                     this.answerBox.text = content;
 
-                //gridManager.removeCollectedCellId(cell);
                 this.collectedCell.Add(cell);
                 cell.SetTextStatus(false);
-                /*GameController.Instance.updateSentence(cell, 
-                ()=>
-                {
-                    //Correct
-                    AudioController.Instance?.PlayAudio(9);
-                    gridManager.removeCollectedCellId(cell);
-                    cell.setGetWordEffect(true,
-                                          GameController.Instance.FlyingPosition(this.UserId < 2 ? 0: 1),
-                                          ()=>
-                                          {
-                                              GameController.Instance.UpdateDisplayedQuestion(content);
-                                          });
-                    this.collectedCell.Add(cell);
-                },
-                ()=>
-                {
-                    //Wrong
-                    AudioController.Instance?.PlayAudio(10);
-                    LogController.Instance.debug("wrong letter!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    gridManager.updateNewWordPosition(cell);
-                    this.backToStartPosition();
-                }
-                );*/
+                
             }
         }
     }
 
     public void correctAction(string c)
     {
-        this.answer += c;
+        this.answer = c;
         //SetUI.SetScale(this.answerBoxCg, true, 1f, 0.5f, Ease.OutElastic);
-        if (this.answerBox != null)
-            this.answerBox.text = this.answer;
+        /*if (this.answerBox != null)
+            this.answerBox.text = this.answer;*/
     }
 
     public void finishedAction()
@@ -563,7 +527,7 @@ public class PlayerController : UserData
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Check if the other collider has a specific tag, e.g., "Player"
-        if (other.CompareTag("Word"))
+        if (other.CompareTag("Word") && !SetUI.isAnimated)
         {
             var cell = other.GetComponent<Cell>();
             if (cell != null)
@@ -574,7 +538,7 @@ public class PlayerController : UserData
                     if (this.collectedCell.Count > 0)
                     {
                         var latestCell = this.collectedCell[this.collectedCell.Count - 1];
-                        latestCell.SetTextStatus(true);
+                        if(latestCell!= null) latestCell.SetTextStatus(true);
                         this.collectedCell.RemoveAt(this.collectedCell.Count - 1);
                     }
                     this.setAnswer(cell);
@@ -582,6 +546,78 @@ public class PlayerController : UserData
                 }
             }
         }
+        else
+        {
+            if (other.CompareTag("fillWord_top") && this.UserId > 1 && !SetUI.isAnimated)
+            {
+                this.placeWord(other);
+
+            }
+            else if (other.CompareTag("fillWord_bottom") && this.UserId < 2 && !SetUI.isAnimated)
+            {
+                this.placeWord(other);
+            }
+        }
+    }
+
+    void placeWord(Collider2D other)
+    {
+        var fillWord = other.GetComponent<FillWord>();
+        if (!fillWord.filled)
+        {
+            //放入
+            if (!string.IsNullOrEmpty(this.answerBox.text))
+            {
+                var storedFillWords = GameController.Instance.centerFillWords.storedFillWords;
+                for(int i=0; i < storedFillWords.Length; i++)
+                {
+                    for (int j = 0; j < storedFillWords[i].fillWords.Count; j++)
+                    {
+                        if(j == fillWord.fillId)
+                        {
+                            storedFillWords[i].fillWords[j].SetContent(this.answerBox.text);
+                        }
+                    }
+                }
+                SetUI.SetScale(this.answerBoxCg, false, 1f, 0.5f, Ease.OutElastic);
+                this.answerBox.text = "";
+                AudioController.Instance?.PlayAudio(9);
+
+                if (this.collectedCell.Count > 0)
+                {
+                    var filledCell = this.collectedCell[this.collectedCell.Count - 1];
+                    fillWord.savedCell = filledCell;
+                    this.collectedCell.RemoveAt(this.collectedCell.Count - 1);
+                }
+            }
+        }
+        else
+        {
+            //拿回
+            if (string.IsNullOrEmpty(this.answerBox.text))
+            {
+                SetUI.SetScale(this.answerBoxCg, true, 1f, 0.5f, Ease.OutElastic);
+                this.answerBox.text = fillWord.content;
+                var storedFillWords = GameController.Instance.centerFillWords.storedFillWords;
+                for (int i = 0; i < storedFillWords.Length; i++)
+                {
+                    for (int j = 0; j < storedFillWords[i].fillWords.Count; j++)
+                    {
+                        if (j == fillWord.fillId)
+                        {
+                            storedFillWords[i].fillWords[j].SetContent("");
+                        }
+                    }
+                }
+                this.collectedCell.Add(fillWord.savedCell);
+            }
+            else
+            {
+                //cannot fill;
+            }
+        }
+
+        GameController.Instance.updateSentence();
     }
 
     private void OnTriggerExit2D(Collider2D other)

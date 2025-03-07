@@ -3,7 +3,36 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Word
+  - P4-controller
+  - P2-controller
+  - Wall
+  - P3_Blood
+  - P2_Blood
+  - GameBackground
+  - P1_Blood
+  - P4_Blood
+  - P3-controller
+  - P1-controller
+  - P1_AnswerScore
+  - P2_AnswerScore
+  - P3_AnswerScore
+  - P4_AnswerScore
+  - P1_ResultScore
+  - P2_ResultScore
+  - P3_ResultScore
+  - P4_ResultScore
+  - P1_Icon
+  - P1_Score
+  - P2_Icon
+  - P2_Score
+  - P3_Icon
+  - P3_Score
+  - P4_Icon
+  - P4_Score
+  - fillWord_top
+  - fillWord_bottom
   layers:
   - Default
   - TransparentFX

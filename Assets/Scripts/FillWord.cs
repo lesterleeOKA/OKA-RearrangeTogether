@@ -8,18 +8,24 @@ public class FillWord : MonoBehaviour
     public TextMeshProUGUI text;
     public CanvasGroup filledBg;
     public GameObject fillingHint;
+    public string content = "";
+    public Cell savedCell = null;
+    public int fillId = -1;
     // Start is called before the first frame update
-    public void init(string name="")
+    public void init(string name="", int fillId= -1)
     {
         this.gameObject.name = name;
         this.filled = false;
         this.SetContent("");
         this.SetWord(true);
+        this.savedCell = null;
+        this.fillId = fillId;
     }
 
     public void SetContent(string _word)
     {
        this.filled = string.IsNullOrEmpty(_word) ? false : true;
+       this.content = _word;
        if (this.text != null)
        {
           this.text.text = _word;

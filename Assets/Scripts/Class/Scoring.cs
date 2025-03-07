@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -35,7 +36,9 @@ public class Scoring
         {
             if (!string.IsNullOrEmpty(_correctAnswer))
             {
-                if(_answer == _correctAnswer)
+                bool isCorrect = string.Equals(_answer.Trim(), _correctAnswer.Trim(), StringComparison.OrdinalIgnoreCase);
+
+                if (isCorrect)
                 {
                     this.correct = true;
                     int mark = eachMarkOfQA * this.bonnus;

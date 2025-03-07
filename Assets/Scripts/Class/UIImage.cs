@@ -3,6 +3,7 @@ using DG.Tweening;
 using System;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 
 [Serializable]
 public class UIImage
@@ -66,6 +67,7 @@ public static class SetConvert
 
 public static class SetUI
 {
+    public static bool isAnimated = false;
     public static void Set(CanvasGroup _cg=null, bool _status=false, float _duration=0f, Action _onComplete = null)
     {
         if (_cg != null)
@@ -129,12 +131,14 @@ public static class SetUI
 
     public static void SetScale(CanvasGroup _cg = null, bool _status = false, float endValue=1f, float _duration = 0f, Ease easeType= default,  Action _onComplete = null)
     {
-        if (_cg != null)
+        if (_cg != null && !isAnimated)
         {
+            isAnimated = true;
             _cg.transform.DOScale(0f, 0f);
             _cg.transform.DOScale(_status ? endValue : 0f, _duration).SetEase(easeType).OnComplete(() => {
                 if (_onComplete != null)
                     _onComplete.Invoke();
+                isAnimated = false;
             });
             _cg.interactable = _status;
             _cg.blocksRaycasts = _status;
